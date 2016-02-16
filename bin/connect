@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "`date '+%F %T'`	`basename $config | cut -d "." -f1`	$common_name	$trusted_ip:$trusted_port" >> /var/log/vpn/`date +%m`

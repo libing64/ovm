@@ -1,0 +1,13 @@
+name pptpd
+refuse-pap
+refuse-chap
+refuse-mschap
+require-mschap-v2
+require-mppe-128
+ms-dns %DNS%
+proxyarp
+nodefaultroute
+lock
+nobsdcomp
+mtu 1404
+mru 1404

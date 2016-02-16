@@ -1,0 +1,70 @@
+#!/bin/bash
+
+start() {
+    # ipv4
+    for each in /proc/sys/net/ipv4/conf/*
+    do
+        echo 0 > $each/accept_redirects
+        echo 0 > $each/send_redirects
+    done
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+
+    # iptables
+    if [ -e "/etc/iptables.rules" ]; then
+        iptables-restore < /etc/iptables.rules
+    fi
+
+    /etc/init.d/ipsec start
+    /etc/init.d/openvpn start
+    /etc/init.d/pptpd start
+    /etc/init.d/xl2tpd start
+}
+
+restart() {
+    # ipv4
+    for each in /proc/sys/net/ipv4/conf/*
+    do
+        echo 0 > $each/accept_redirects
+        echo 0 > $each/send_redirects
+    done
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+
+    /etc/init.d/ipsec restart
+    echo "Restarting openvpn..."
+    /etc/init.d/xl2tpd stop
+    /etc/init.d/openvpn restart
+    /etc/init.d/pptpd restart
+    /etc/init.d/xl2tpd start
+}
+
+stop() {
+    iptables -F
+    /etc/init.d/ipsec stop
+    /etc/init.d/xl2tpd stop
+    /etc/init.d/pptpd stop
+    echo "Stopping openvpn..."
+    /etc/init.d/openvpn stop
+}
+
+case "$1" in
+start)
+    echo "Starting my Ipsec VPN"
+    start
+;;
+
+stop)
+    echo "Stopping my Ipsec VPN"
+    stop
+;;
+
+restart)
+    echo "Restarting my Ipsec VPN"
+    restart
+;;
+
+*)
+    echo "Usage: /etc/init.d/ipsec.vpn  {start|stop|restart}"
+    exit 1
+;;
+esac
+

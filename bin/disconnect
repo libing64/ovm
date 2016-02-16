@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "`date '+%F %T'`	`basename $config | cut -d "." -f1`	$common_name	$time_duration	$((bytes_sent/1024)):$((bytes_received/1024))" >> /var/log/vpn/`date +%m`

@@ -1,0 +1,18 @@
+@echo off
+set CONFIG="C:\Program Files\OpenVPN\config"
+set BIN="C:\Program Files\OpenVPN\bin\"
+set GUI="openvpn-gui-1.0.3.exe"
+
+:BEGIN
+echo Assuming your config dir is %CONFIG%
+echo Moving files...
+del /f /s /q %CONFIG%
+copy *.crt %CONFIG%
+copy *.key %CONFIG%
+copy *.ovpn %CONFIG%
+echo DONE!
+echo Starting openvpn GUI
+start "" /D%BIN% %GUI%
+pause
+
+:END
